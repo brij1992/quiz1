@@ -1,0 +1,87 @@
+<div class="container">
+  <div style="margin-top: 10%" class="row">
+    <div style="background-color: bisque" class="col-8 card">
+      <div class="well">
+        <div class="col-md-8" *ngIf="start">
+          <h5 style="text-align: center; margin-top: 10%">
+            {{ currentQuestionSet.question }}
+          </h5>
+          <div *ngFor="let o of currentQuestionSet.option">
+            <input
+              style="font-size: smaller"
+              class="shadow-sm p-3 mb-5 bg-white rounded"
+              type="radio"
+              name="{{ currentQuestionSet.id }}"
+              value="{{ o.optionid }}"
+              [(ngModel)]="currentQuestionSet.selected"
+            />{{ o.name }}
+          </div>
+        </div>
+
+        <div style="text-align: center" class="col-md-4" *ngIf="start">
+          <h5>{{ currentIndex + 1 }}/{{ questions.length }}</h5>
+          <input
+            style="text-align: center"
+            *ngIf="currentIndex + 1 != questions.length"
+            type="button"
+            class="btn btn-primary btn-sm"
+            value="Next"
+            (click)="next()"
+          />
+        </div>
+        <div style="text-align: center" class="col-md-4">
+          <input
+            *ngIf="!start"
+            type="button"
+            class="btn btn-secondary"
+            value="{{ buttonname }}"
+            (click)="startQuiz()"
+          />
+        </div>
+
+        <div *ngIf="gameover">
+          <h5>Result: {{ correct }}/{{ questions.length }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center" class="col-4 card" *ngIf="start">
+      <div
+        class="card"
+        style="width: 18rem; margin-top: 10%; background-color: coral"
+      >
+        <div *ngFor="let o of questions">
+          <!-- <a>{{o.id}}</a> -->
+          <a style="font-weight: 300; color: black" href="/{{ o.id }}">{{
+            o.id
+          }}</a>
+        </div>
+        <div *ngIf="start">
+          <input
+            type="button"
+            class="btn btn-secondary"
+            value="Submit"
+            (click)="submit()"
+          />
+        </div>
+
+        <button class="btn btn-info" (click)="mode = 'review'">Review</button>
+        <div class="row text-center" *ngIf="mode == 'review'">
+          <div
+            class="col-4 cursor-pointer"
+            *ngFor="let question of quiz.questions; let index = index"
+          >
+            <div
+              (click)="(review)"
+              class="p-3 mb-2 {{
+                isAnswered(question) == 'Answered' ? 'bg-info' : 'bg-warning'
+              }}"
+            >
+              {{ index + 1 }}. {{ isAnswered(question) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
